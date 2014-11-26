@@ -94,7 +94,7 @@ public class Plane : MonoBehaviour {
 
 	void OnEnable()
 	{
-		Debug.Log("Avatar Test");
+		Debug.Log("Avatar Test.");
 	}
 
 
