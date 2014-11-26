@@ -80,24 +80,39 @@ public class Plane : MonoBehaviour {
     /// </summary>
 	void Update () 
 	{
-		NetworkView nV=this.GetComponent<NetworkView>();
-		if((!nV)||(nV.isMine))
+
+
+		if(Input.GetKey (KeyCode.UpArrow))
 		{
-
-			if(Input.GetKeyDown(KeyCode.UpArrow))
-			{
-				if(!GameObject.Find("Bubble(Clone)"))
-				{
-					Vector3 newPos = new Vector3(transform.position.x+0.01f, transform.position.y, transform.position.z);
-					transform.position = newPos;
-				}
-			}
+			this.networkView.RPC("movePlane", RPCMode.AllBuffered);
+		}
 
 
-		}			
+				
 	}
+
+
 	void OnEnable()
 	{
 		Debug.Log("Avatar Test");
 	}
+
+
+
+	[RPC]
+	public virtual void movePlane() {
+		NetworkView nV=this.GetComponent<NetworkView>();
+		if((!nV)||(nV.isMine))
+		{
+			Vector3 newPos = new Vector3(transform.position.x+0.01f, transform.position.y, transform.position.z);
+			transform.position = newPos;
+				
+		}
+	}
+
+
+
 }
+
+
+
