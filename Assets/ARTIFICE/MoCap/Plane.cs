@@ -84,8 +84,16 @@ public class Plane : MonoBehaviour {
 		if((!nV)||(nV.isMine))
 		{
 
-			Vector3 newPos = new Vector3(transform.position.x+0.01f, transform.position.y, transform.position.z);
-			transform.position = newPos;
+			if(Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				if(!GameObject.Find("Bubble(Clone)"))
+				{
+					Vector3 newPos = new Vector3(transform.position.x+0.01f, transform.position.y, transform.position.z);
+					transform.position = newPos;
+				}
+			}
+
+
 		}			
 	}
 	void OnEnable()
