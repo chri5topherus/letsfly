@@ -38,12 +38,13 @@ public class Plane : MonoBehaviour {
 	public Transform translationObject=null;
 	public Vector3 direction = new Vector3(0.0f, 0.0f, -1.0f);
 	public bool isMoving = true;
+	public bool isFlying = false;
 
 	public float minHeight = -25.0f;
 	public float maxHeight = 0.5f;
 	public float maxSpeed = 10.0f;
-	public float minSpeed = 5.0f;
-	public float speed = 2.0f;
+	public float minSpeed = 0.0f;
+	public float speed = 0.0f;
 
 	private bool initialized=false;//True if StartTrackingLimb has been called for all limbs
 
@@ -82,6 +83,12 @@ public class Plane : MonoBehaviour {
 		}
 
 		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("Plane_Prefab_Network(Clone)").transform;
+		speed = 0.0f;
+		minHeight = -1.5f;
+		maxHeight = 2.0f;
+		maxSpeed = 10.0f;
+		minSpeed = 2.0f;
+		speed = 0.0f;
 		
 	}
 	
@@ -153,41 +160,53 @@ public class Plane : MonoBehaviour {
 		{
 			Vector3 newPos = new Vector3();
 			float upOrDown = 0.0f;
+			float newHeight = transform.position.y;
 
 			float curveSpeed = 45.0f * Time.deltaTime;
 			
+			if(speed >= minSpeed) {
+				if(left) {
+					direction = Quaternion.AngleAxis(-curveSpeed,  Vector3.up) * direction;
+					transform.rotation = Quaternion.AngleAxis (-curveSpeed, Vector3.up) * transform.rotation;
+				}
 
-			if(left) {
-				direction = Quaternion.AngleAxis(-curveSpeed,  Vector3.up) * direction;
-				transform.rotation = Quaternion.AngleAxis (-curveSpeed, Vector3.up) * transform.rotation;
+				if(right) {
+					direction = Quaternion.AngleAxis(curveSpeed, Vector3.up) * direction;
+					transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
+				}
+
+
+				newHeight = transform.position.y + direction.y*speed*Time.deltaTime;
+				if(up) {
+					upOrDown += speed*Time.deltaTime;
+					newHeight = Math.Min (maxHeight, newHeight + upOrDown);
+				}
+
+				if(down) {
+					upOrDown -= speed*Time.deltaTime;
+					newHeight = Math.Max (minHeight, newHeight + upOrDown);
+				}
+				if(speedUp) {
+					
+					speed += 0.1f;
+					speed = Math.Min(speed, maxSpeed);
+				}
 			}
 
-			if(right) {
-				direction = Quaternion.AngleAxis(curveSpeed, Vector3.up) * direction;
-				transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
-			}
-
-
-			float newHeight = transform.position.y + direction.y*speed*Time.deltaTime;
-			if(up) {
-				upOrDown += speed*Time.deltaTime;
-				newHeight = Math.Min (maxHeight, newHeight + upOrDown);
-			}
-
-			if(down) {
-				upOrDown -= speed*Time.deltaTime;
-				newHeight = Math.Max (minHeight, newHeight + upOrDown);
-			}
-
-			if(speedUp) {
-				speed += 0.1f;
-				speed = Math.Min(speed, maxSpeed);
+			else {
+				if(speedUp) {
+					speed += 0.01f;
+					speed = Math.Min(speed, maxSpeed);
+				}
 			}
 			
 			
 
-			speed -= 0.01f;
-			speed = Math.Max(minSpeed, speed);
+
+			if(speed >= minSpeed) {
+				speed -= 0.01f;
+				speed = Math.Max(minSpeed, speed);
+			}
 
 			newPos = new Vector3(transform.position.x+direction.x*speed*Time.deltaTime, newHeight, transform.position.z + direction.z*speed*Time.deltaTime);
 
