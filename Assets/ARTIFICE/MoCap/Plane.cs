@@ -36,6 +36,8 @@ using System;
 public class Plane : MonoBehaviour {
 	//Array of Limbs that is used to hold the GameObjects of the Character, which are to be transformed
 	public Transform translationObject=null;
+	public Vector3 direction = new Vector3(0.0f, 0.0f, -1.0f);
+	public bool isMoving = true;
 
 	private bool initialized=false;//True if StartTrackingLimb has been called for all limbs
 
@@ -72,6 +74,8 @@ public class Plane : MonoBehaviour {
 		{
 			Debug.Log("Error: GameObject with AvatarSkript needs a parent Object to work");
 		}
+
+		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("Plane_Prefab_Network(Clone)").transform;
 		
 	}
 	
@@ -82,9 +86,36 @@ public class Plane : MonoBehaviour {
 	{
 
 
-		if(Input.GetKey (KeyCode.UpArrow))
-		{
-			this.networkView.RPC("movePlane", RPCMode.AllBuffered);
+		if (isMoving) {
+
+			bool stepMoved = false;
+
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, true, false);
+				stepMoved = true;
+			}
+
+
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, true);
+				stepMoved = true;
+			}
+
+
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, true, false, false, false);
+				stepMoved = true;
+			}
+
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, true, false, false);
+				stepMoved = true;
+			}
+
+			if(!stepMoved) {
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, false);
+			}
+
 		}
 
 
@@ -100,13 +131,47 @@ public class Plane : MonoBehaviour {
 
 
 	[RPC]
-	public virtual void movePlane() {
+	public virtual void movePlane(bool left, bool right, bool up, bool down) {
+
+
+
 		NetworkView nV=this.GetComponent<NetworkView>();
 		if((!nV)||(nV.isMine))
 		{
-			Vector3 newPos = new Vector3(transform.position.x+0.01f, transform.position.y, transform.position.z);
+			Vector3 newPos = new Vector3();
+			float upOrDown = 0.0f;
+			float speed = 2.0f * Time.deltaTime;
+			float curveSpeed = 35.0f * Time.deltaTime;
+			
+
+			if(left) {
+				direction = Quaternion.AngleAxis(-curveSpeed,  Vector3.up) * direction;
+				transform.rotation = Quaternion.AngleAxis (-curveSpeed, Vector3.up) * transform.rotation;
+			}
+
+			if(right) {
+				direction = Quaternion.AngleAxis(curveSpeed, Vector3.up) * direction;
+				transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
+			}
+
+			if(up) {
+				upOrDown += speed;
+			}
+
+			if(down) {
+				upOrDown -= speed;
+			}
+			
+			
+			/*if(right) {
+				newPos = new Vector3(transform.position.x-speed, transform.position.y, transform.position.z);
+			}*/
+
+
+			newPos = new Vector3(transform.position.x+direction.x*speed, transform.position.y + upOrDown + direction.y*speed, transform.position.z + direction.z*speed);
+
 			transform.position = newPos;
-				
+
 		}
 	}
 
