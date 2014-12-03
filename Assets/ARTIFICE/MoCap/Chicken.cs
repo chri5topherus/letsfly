@@ -63,4 +63,8 @@ public class Chicken : MonoBehaviour {
 		}
 
 	}
+
+	void OnCollisionEnter(Collision theCollision){
+		Debug.Log ("hallo2");
+	}
 }

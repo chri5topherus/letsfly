@@ -312,5 +312,9 @@ public class FadenKreuzSpaceMouse : TrackProvider
 			_button3State = 0;
 		}
 	}
+
+	void OnTriggerEnter(Collider other) {
+		Debug.Log ("chicken inside netz");
+	}
 	
 }
