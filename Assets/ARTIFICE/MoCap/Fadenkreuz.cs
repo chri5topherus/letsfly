@@ -9,9 +9,12 @@ public class Fadenkreuz : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		plane = GameObject.Find ("spinning_plane(Clone)");
-		transform.parent = plane.transform;
+		//transform.parent = plane.transform;
 		Vector3 spawnPos = new Vector3 (plane.transform.position.x, -1.39f, plane.transform.position.z - 25.0f);
 		Network.Instantiate (fadenkreuz_prefab, new Vector3(10.0f, 1.0f, -10.0f), Quaternion.identity, 0);
+
+		GameObject.Find ("fadenkreuz_prefab(Clone)").transform.parent = plane.transform;
+	
 	}
 	
 	// Update is called once per frame

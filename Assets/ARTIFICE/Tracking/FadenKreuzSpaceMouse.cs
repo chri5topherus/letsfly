@@ -179,36 +179,21 @@ public class FadenKreuzSpaceMouse : TrackProvider
 		}
     }
 	
-	/// <summary>
-	/// Handles translation data (Continously sum up translation) from space mouse and sends 
-	/// it to unity transform node if transation is set to active. 
-	/// When performing a rotation with the space mouse translation can be deactivated by clicking button 2 
-	/// which offers better usability for rotating and storing current rotation. 
-	/// </summary>
-	/// <param name="position">Position of current translation</param>
+
 	private void handlePosition(Vector3 position)
 	{
 		
-		// if button 2 has been released -> (de)active translation
 		if (button2State == 2) 
 		{
 			
-			if(_translateIsActive)
-			{
-				_translateIsActive = false;
-				Debug.Log("Translate deactivated");
-			}
-			else
-			{
-				_translateIsActive = true;
-				Debug.Log("Translate activated");
-			}
+			//right button pressed
 		}
 		
 		if (_translateIsActive)
 		{
 			// sum up position values
 			position = (position * base.scalePosition) + gameObject.transform.localPosition;
+			position = new Vector3(position.x, -1.39f, position.z);
 			transform.localPosition = position;
 		}
 	}
@@ -313,8 +298,15 @@ public class FadenKreuzSpaceMouse : TrackProvider
 		}
 	}
 
-	void OnTriggerEnter(Collider other) {
+	void OnTriggerStay(Collider other) {
 		Debug.Log ("chicken inside netz");
+		if(other.gameObject.name.Contains("Chicken")) {
+
+			if(_button != 0) {
+				GameObject.Destroy (other.gameObject);
+			}
+		}
+
 	}
 	
 }
