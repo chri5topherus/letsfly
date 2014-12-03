@@ -46,6 +46,8 @@ public class Plane : MonoBehaviour {
 	public float minSpeed = 0.0f;
 	public float speed = 0.0f;
 
+
+
 	private bool initialized=false;//True if StartTrackingLimb has been called for all limbs
 
 	/// <summary>
@@ -82,14 +84,16 @@ public class Plane : MonoBehaviour {
 			Debug.Log("Error: GameObject with AvatarSkript needs a parent Object to work");
 		}
 
-		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("Plane_Prefab_Network(Clone)").transform;
+		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("spinning_plane(Clone)").transform;
 		speed = 0.0f;
 		minHeight = -1.5f;
 		maxHeight = 2.0f;
 		maxSpeed = 10.0f;
 		minSpeed = 2.0f;
 		speed = 0.0f;
-		
+
+
+
 	}
 	
 	/// <summary>
@@ -97,6 +101,7 @@ public class Plane : MonoBehaviour {
     /// </summary>
 	void Update () 
 	{
+
 
 
 		if (isMoving) {
@@ -163,17 +168,20 @@ public class Plane : MonoBehaviour {
 			float newHeight = transform.position.y;
 
 			float curveSpeed = 45.0f * Time.deltaTime;
-			
-			if(speed >= minSpeed) {
-				if(left) {
-					direction = Quaternion.AngleAxis(-curveSpeed,  Vector3.up) * direction;
-					transform.rotation = Quaternion.AngleAxis (-curveSpeed, Vector3.up) * transform.rotation;
-				}
 
-				if(right) {
-					direction = Quaternion.AngleAxis(curveSpeed, Vector3.up) * direction;
-					transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
-				}
+			if(left) {
+				direction = Quaternion.AngleAxis(-curveSpeed,  Vector3.up) * direction;
+				transform.rotation = Quaternion.AngleAxis (-curveSpeed, Vector3.up) * transform.rotation;
+			}
+			
+			if(right) {
+				direction = Quaternion.AngleAxis(curveSpeed, Vector3.up) * direction;
+				transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
+			}
+
+
+			if(speed >= minSpeed) {
+
 
 
 				newHeight = transform.position.y + direction.y*speed*Time.deltaTime;
