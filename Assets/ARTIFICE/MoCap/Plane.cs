@@ -39,6 +39,12 @@ public class Plane : MonoBehaviour {
 	public Vector3 direction = new Vector3(0.0f, 0.0f, -1.0f);
 	public bool isMoving = true;
 
+	public float minHeight = -25.0f;
+	public float maxHeight = 0.5f;
+	public float maxSpeed = 10.0f;
+	public float minSpeed = 5.0f;
+	public float speed = 2.0f;
+
 	private bool initialized=false;//True if StartTrackingLimb has been called for all limbs
 
 	/// <summary>
@@ -89,31 +95,38 @@ public class Plane : MonoBehaviour {
 		if (isMoving) {
 
 			bool stepMoved = false;
+			bool speedUp = false;
+
+			if (Input.GetKey (KeyCode.S)) {
+				speedUp = true;
+			}
 
 			if (Input.GetKey (KeyCode.UpArrow)) {
-				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, true, false);
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, true, false, speedUp);
 				stepMoved = true;
 			}
 
 
 			if (Input.GetKey (KeyCode.DownArrow)) {
-				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, true);
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, true, speedUp);
 				stepMoved = true;
 			}
 
 
 			if (Input.GetKey (KeyCode.LeftArrow)) {
-				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, true, false, false, false);
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, true, false, false, false, speedUp);
 				stepMoved = true;
 			}
 
 			if (Input.GetKey (KeyCode.RightArrow)) {
-				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, true, false, false);
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, true, false, false, speedUp);
 				stepMoved = true;
 			}
 
+		
+
 			if(!stepMoved) {
-				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, false);
+				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, false, speedUp);
 			}
 
 		}
@@ -131,7 +144,7 @@ public class Plane : MonoBehaviour {
 
 
 	[RPC]
-	public virtual void movePlane(bool left, bool right, bool up, bool down) {
+	public virtual void movePlane(bool left, bool right, bool down, bool up, bool speedUp) {
 
 
 
@@ -140,8 +153,8 @@ public class Plane : MonoBehaviour {
 		{
 			Vector3 newPos = new Vector3();
 			float upOrDown = 0.0f;
-			float speed = 2.0f * Time.deltaTime;
-			float curveSpeed = 35.0f * Time.deltaTime;
+
+			float curveSpeed = 45.0f * Time.deltaTime;
 			
 
 			if(left) {
@@ -154,21 +167,29 @@ public class Plane : MonoBehaviour {
 				transform.rotation = Quaternion.AngleAxis (curveSpeed, Vector3.up) * transform.rotation;
 			}
 
+
+			float newHeight = transform.position.y + direction.y*speed*Time.deltaTime;
 			if(up) {
-				upOrDown += speed;
+				upOrDown += speed*Time.deltaTime;
+				newHeight = Math.Min (maxHeight, newHeight + upOrDown);
 			}
 
 			if(down) {
-				upOrDown -= speed;
+				upOrDown -= speed*Time.deltaTime;
+				newHeight = Math.Max (minHeight, newHeight + upOrDown);
+			}
+
+			if(speedUp) {
+				speed += 0.1f;
+				speed = Math.Min(speed, maxSpeed);
 			}
 			
 			
-			/*if(right) {
-				newPos = new Vector3(transform.position.x-speed, transform.position.y, transform.position.z);
-			}*/
 
+			speed -= 0.01f;
+			speed = Math.Max(minSpeed, speed);
 
-			newPos = new Vector3(transform.position.x+direction.x*speed, transform.position.y + upOrDown + direction.y*speed, transform.position.z + direction.z*speed);
+			newPos = new Vector3(transform.position.x+direction.x*speed*Time.deltaTime, newHeight, transform.position.z + direction.z*speed*Time.deltaTime);
 
 			transform.position = newPos;
 
