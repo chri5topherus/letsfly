@@ -12,6 +12,8 @@ public class ChickenSpawner : MonoBehaviour {
 			Vector3 spawnPosition = new Vector3 (xPos, 0.0f, yPos);
 			Network.Instantiate(chicken_prefab, spawnPosition, Quaternion.identity, 0);
 		}
+	
+
 	}
 	
 	// Update is called once per frame

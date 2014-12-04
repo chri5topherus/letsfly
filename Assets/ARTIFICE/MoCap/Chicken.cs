@@ -22,8 +22,6 @@ public class Chicken : MonoBehaviour {
 		speed = 1.5f;
 		goingLeft = false;
 		goingRight = false;
-
-
 		transform.rotation = Quaternion.LookRotation (Quaternion.AngleAxis (90.0f, Vector3.up) * direction);
 
 	}
