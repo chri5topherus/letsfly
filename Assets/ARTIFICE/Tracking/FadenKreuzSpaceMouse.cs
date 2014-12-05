@@ -51,6 +51,7 @@ public class FadenKreuzSpaceMouse : TrackProvider
 	private byte _button1State;
 	private byte _button2State;
 	private byte _button3State;
+
 	
 	/// <summary>
 	/// Get number of current pressed button:
@@ -302,8 +303,15 @@ public class FadenKreuzSpaceMouse : TrackProvider
 		Debug.Log ("chicken inside netz");
 		if(other.gameObject.name.Contains("Chicken")) {
 
+			//other.gameObject.renderer.enabled = false;
+
+
 			if(_button != 0) {
-				GameObject.Destroy (other.gameObject);
+
+				this.networkView.RPC ("collectChicken", RPCMode.AllBuffered, other);
+				//GameObject plane = GameObject.Find ("spinning_plane(Clone)");
+				//other.transform.position = plane.transform.position;
+				//GameObject.Destroy (other.gameObject);
 			}
 		}
 
