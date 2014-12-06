@@ -9,6 +9,7 @@ public class Chicken : MonoBehaviour {
 	public float timePassed = 0.0f;
 	public bool goingLeft = false;
 	public bool goingRight = false;
+	public bool isMoving = true;
 
 
 	// Use this for initialization
@@ -28,41 +29,45 @@ public class Chicken : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		timePassed += Time.deltaTime;
-		Vector3 newPos = new Vector3(transform.position.x+direction.x*speed*Time.deltaTime, transform.position.y+direction.y*speed*Time.deltaTime, transform.position.z + direction.z*speed*Time.deltaTime);
-		transform.position = newPos;
+		if(isMoving) {
+			timePassed += Time.deltaTime;
+			Vector3 newPos = new Vector3(transform.position.x+direction.x*speed*Time.deltaTime, transform.position.y+direction.y*speed*Time.deltaTime, transform.position.z + direction.z*speed*Time.deltaTime);
+			transform.position = newPos;
 
-		if (timePassed >= 1) {
-			float x = Random.Range (0.0f, 100.0f);
-			if (x < 50.0f) {
-					goingLeft = true;
-					goingRight = false;
-			} else if (x > 50.0f) {
-					goingRight = true;
-					goingLeft = false;
+			if (timePassed >= 1) {
+				float x = Random.Range (0.0f, 100.0f);
+				if (x < 50.0f) {
+						goingLeft = true;
+						goingRight = false;
+				} else if (x > 50.0f) {
+						goingRight = true;
+						goingLeft = false;
+				}
+				timePassed = 0.0f;
 			}
-			timePassed = 0.0f;
-		}
 
-		if(goingLeft) {
-			float x = Random.Range (0.0f, 100.0f);
-			if (x < 20.0f) {
-				direction = Quaternion.AngleAxis (-2.0f, Vector3.up) * direction;
-				transform.rotation = Quaternion.AngleAxis (-2.0f, Vector3.up) * transform.rotation;
-			} 
-		}
+			if(goingLeft) {
+				float x = Random.Range (0.0f, 100.0f);
+				if (x < 20.0f) {
+					direction = Quaternion.AngleAxis (-2.0f, Vector3.up) * direction;
+					transform.rotation = Quaternion.AngleAxis (-2.0f, Vector3.up) * transform.rotation;
+				} 
+			}
 
-		if(goingRight) {
-			float x = Random.Range (0.0f, 100.0f);
-			if (x < 20.0f) {
-				direction = Quaternion.AngleAxis (2.0f, Vector3.up) * direction;
-				transform.rotation = Quaternion.AngleAxis (2.0f, Vector3.up) * transform.rotation;
-			} 
+			if(goingRight) {
+				float x = Random.Range (0.0f, 100.0f);
+				if (x < 20.0f) {
+					direction = Quaternion.AngleAxis (2.0f, Vector3.up) * direction;
+					transform.rotation = Quaternion.AngleAxis (2.0f, Vector3.up) * transform.rotation;
+				} 
+			}
 		}
 
 	}
 
 	void OnCollisionEnter(Collision theCollision){
-		Debug.Log ("hallo2");
+		//Debug.Log ("hallo2");
 	}
+
+
 }

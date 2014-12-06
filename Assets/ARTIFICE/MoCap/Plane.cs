@@ -40,8 +40,8 @@ public class Plane : MonoBehaviour {
 	public bool isMoving = true;
 	public bool isFlying = false;
 
-	public float minHeight = -25.0f;
-	public float maxHeight = 0.5f;
+	public float minHeight = 0.0f;
+	public float maxHeight = 2.5f;
 	public float maxSpeed = 10.0f;
 	public float minSpeed = 0.0f;
 	public float speed = 0.0f;

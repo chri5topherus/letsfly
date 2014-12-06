@@ -8,11 +8,15 @@ public class GameLogic : MonoBehaviour {
 	public ArrayList planeChickens;
 	public float remainingSeconds = 300.0f;
 	public bool gameStarted = true;
+	GameObject plane;
+
+	public int caughtChickens = 0;
 
 
 	// Use this for initialization
 	void Start () {
 		planeChickens = new ArrayList ();
+		plane = GameObject.Find ("spinning_plane(Clone)");
 
 	}
 	
@@ -27,7 +31,7 @@ public class GameLogic : MonoBehaviour {
 			//Debug.Log (getTime ());
 		}
 
-		Debug.Log (planeChickens.Count);
+		//Debug.Log (planeChickens.Count);
 	
 	}
 
@@ -37,8 +41,31 @@ public class GameLogic : MonoBehaviour {
 		return min + ":" + sec;
 	}
 
-	[RPC]
+
 	public void collectChicken(GameObject chicken) {
 		planeChickens.Add (chicken);
+	}
+
+	public void dropChickens() {
+	
+		if(isPlaneOverFence()) {
+			Debug.Log ("Drop Chickens");
+			foreach(GameObject go in planeChickens.ToArray()) {
+				caughtChickens++;
+				go.transform.parent = GameObject.Find ("SpawnTest").transform;
+				go.transform.position = new Vector3(2.8f, 0.0f, 45.0f);
+				go.collider.enabled = true;
+				go.rigidbody.isKinematic = false;
+				((Chicken) go.GetComponent<Chicken>()).isMoving = true;
+			}
+		}
+	}
+
+	public bool isPlaneOverFence() {
+		Vector3 pos = plane.transform.position;
+		if(pos.z >= 42.0f && pos.z <=56.0f && pos.x >=-7.5f && pos.x <= 6.6f) {
+			return true;
+		}
+		return false;
 	}
 }

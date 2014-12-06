@@ -52,6 +52,8 @@ public class FadenKreuzSpaceMouse : TrackProvider
 	private byte _button2State;
 	private byte _button3State;
 
+	public GameLogic gameLogic;
+
 	
 	/// <summary>
 	/// Get number of current pressed button:
@@ -137,6 +139,8 @@ public class FadenKreuzSpaceMouse : TrackProvider
 			_compensateOTRotation = Quaternion.Euler(270.0f, 180.0f, 180.0f); // TODO: find angles which compensate OT rotation to 0/0/0 -> with this rotated to 360/0/0
 			_zeroValues = new Vector3(360.0f, 0.0f, 0.0f);
 		}
+
+		gameLogic = (GameLogic) (GameObject.Find ("GameLogic(Clone)").GetComponent<GameLogic>());
 	}
 
     /// <summary>
@@ -187,7 +191,7 @@ public class FadenKreuzSpaceMouse : TrackProvider
 		if (button2State == 2) 
 		{
 			
-			//right button pressed
+			gameLogic.dropChickens();
 		}
 		
 		if (_translateIsActive)
@@ -300,21 +304,34 @@ public class FadenKreuzSpaceMouse : TrackProvider
 	}
 
 	void OnTriggerStay(Collider other) {
-		Debug.Log ("chicken inside netz");
+		//Debug.Log ("chicken inside netz");
+
+
+
+
+
 		if(other.gameObject.name.Contains("Chicken")) {
 
-			//other.gameObject.renderer.enabled = false;
-
+		
 
 			if(_button != 0) {
 
 				this.networkView.RPC ("collectChicken", RPCMode.AllBuffered, other);
-				//GameObject plane = GameObject.Find ("spinning_plane(Clone)");
-				//other.transform.position = plane.transform.position;
+				Chicken chicken = (Chicken)(other.gameObject.GetComponent<Chicken>());
+				chicken.isMoving = false;
+				other.enabled = false;
+				other.gameObject.rigidbody.isKinematic =true;
+				GameObject plane = GameObject.Find ("spinning_plane(Clone)");
+				other.transform.position = plane.transform.position;
+				other.transform.rotation = Quaternion.identity;
+				other.transform.parent = plane.transform;
 				//GameObject.Destroy (other.gameObject);
+				gameLogic.collectChicken(other.gameObject);
 			}
 		}
 
 	}
+
+
 	
 }
