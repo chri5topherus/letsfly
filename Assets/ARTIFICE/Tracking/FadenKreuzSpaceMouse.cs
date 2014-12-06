@@ -54,6 +54,7 @@ public class FadenKreuzSpaceMouse : TrackProvider
 
 	public GameLogic gameLogic;
 
+
 	
 	/// <summary>
 	/// Get number of current pressed button:
@@ -120,6 +121,7 @@ public class FadenKreuzSpaceMouse : TrackProvider
 	/// </summary>
 	void Start()
 	{
+		collider.enabled = false;
 		_waitToSaveOrientation = false;
 		_translateIsActive = true;
 		_savedRotation = Quaternion.identity;
@@ -141,13 +143,17 @@ public class FadenKreuzSpaceMouse : TrackProvider
 		}
 
 		gameLogic = (GameLogic) (GameObject.Find ("GameLogic(Clone)").GetComponent<GameLogic>());
+		//plane = GameObject.Find ("spinning_plane(Clone)");
+
+		//handlePosition (new Vector3(0.0f, 0.0f, 0.0f));
 	}
 
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update() {
-		
+
+
 		if(tracker == null)
 		{
 			if(!Manager.useDedicatedServer || (Manager.useDedicatedServer && Network.isClient)) 
@@ -187,19 +193,36 @@ public class FadenKreuzSpaceMouse : TrackProvider
 
 	private void handlePosition(Vector3 position)
 	{
+		//Debug.Log ("###############################################################################");
 		
 		if (button2State == 2) 
 		{
 			
 			gameLogic.dropChickens();
+			gameLogic.throwTomat();
 		}
 		
 		if (_translateIsActive)
 		{
+
 			// sum up position values
+			GameObject plane = GameObject.Find("spinning_plane(Clone)");
 			position = (position * base.scalePosition) + gameObject.transform.localPosition;
-			position = new Vector3(position.x, -1.39f, position.z);
+			position = new Vector3(position.x, 0.0f, position.z);
+
+			transform.localScale = new Vector3(50.0f, 0.1f, 50.0f);
+
+			position.x = Math.Max(position.x, -500.0f);
+			position.x = Math.Min (position.x, 500.0f);
+			position.z = Math.Max (position.z, -800.0f);
+			position.z = Math.Min (position.z, -300.0f);
+
 			transform.localPosition = position;
+
+			Vector3 globalPos = new Vector3(transform.position.x, -1.34f, transform.position.z);
+
+			transform.position = globalPos;
+			collider.enabled = true;
 		}
 	}
 	
@@ -312,22 +335,25 @@ public class FadenKreuzSpaceMouse : TrackProvider
 
 		if(other.gameObject.name.Contains("Chicken")) {
 
-		
+			if(gameLogic.planeChickenCount <2) {
 
-			if(_button != 0) {
+			//if(_button != 0) {
 
-				this.networkView.RPC ("collectChicken", RPCMode.AllBuffered, other);
+				//this.networkView.RPC ("collectChicken", RPCMode.AllBuffered, other);
 				Chicken chicken = (Chicken)(other.gameObject.GetComponent<Chicken>());
 				chicken.isMoving = false;
 				other.enabled = false;
 				other.gameObject.rigidbody.isKinematic =true;
 				GameObject plane = GameObject.Find ("spinning_plane(Clone)");
-				other.transform.position = plane.transform.position;
-				other.transform.rotation = Quaternion.identity;
-				other.transform.parent = plane.transform;
+				other.gameObject.transform.position = plane.transform.position;
+				other.gameObject.transform.rotation = Quaternion.identity;
+				other.gameObject.transform.parent = plane.transform;
 				//GameObject.Destroy (other.gameObject);
-				gameLogic.collectChicken(other.gameObject);
+				
+						gameLogic.collectChicken(other.gameObject);
+
 			}
+			//}
 		}
 
 	}

@@ -9,15 +9,19 @@ public class GameLogic : MonoBehaviour {
 	public float remainingSeconds = 300.0f;
 	public bool gameStarted = true;
 	GameObject plane;
+	public int remainingTomat = 1;
+	public Transform tomat_prefab;
 
 	public int caughtChickens = 0;
+	public int planeChickenCount = 0;
 
 
 	// Use this for initialization
 	void Start () {
 		planeChickens = new ArrayList ();
 		plane = GameObject.Find ("spinning_plane(Clone)");
-
+		remainingTomat = 1;
+		planeChickenCount = 0;
 	}
 	
 	// Update is called once per frame
@@ -43,7 +47,13 @@ public class GameLogic : MonoBehaviour {
 
 
 	public void collectChicken(GameObject chicken) {
+
+		if(planeChickenCount <2) {
 		planeChickens.Add (chicken);
+			planeChickenCount++;
+		}
+
+		Debug.Log (planeChickenCount + ", " + planeChickens.Count);
 	}
 
 	public void dropChickens() {
@@ -52,6 +62,7 @@ public class GameLogic : MonoBehaviour {
 			Debug.Log ("Drop Chickens");
 			foreach(GameObject go in planeChickens.ToArray()) {
 				caughtChickens++;
+				planeChickenCount = 0;
 				go.transform.parent = GameObject.Find ("SpawnTest").transform;
 				go.transform.position = new Vector3(2.8f, 0.0f, 45.0f);
 				go.collider.enabled = true;
@@ -67,5 +78,18 @@ public class GameLogic : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	public void throwTomat() {
+
+		if(!isPlaneOverFence()) {
+			if(remainingTomat >= 1) {
+				GameObject tom = GameObject.Find("Tomat_P(Clone)");
+				Debug.Log ("throw tomatoe");	
+				tom.transform.position = new Vector3(GameObject.Find ("fadenkreuz_prefab(Clone)").transform.position.x, 0.0f, GameObject.Find ("fadenkreuz_prefab(Clone)").transform.position.z);
+				//Network.Instantiate(tomat_prefab, GameObject.Find ("fadenkreuz_prefab(Clone)").transform.position, Quaternion.identity, 0);
+				remainingTomat--;
+			}
+		}
 	}
 }

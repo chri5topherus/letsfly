@@ -10,7 +10,7 @@ public class ChickenSpawner : MonoBehaviour {
 			float xPos = Random.Range (-40, 40);
 			float yPos = Random.Range (-40, 40);
 			Vector3 spawnPosition = new Vector3 (xPos, 0.0f, yPos);
-			Network.Instantiate(chicken_prefab, spawnPosition, Quaternion.identity, 0);
+			//Network.Instantiate(chicken_prefab, spawnPosition, Quaternion.identity, 0);
 		}
 	
 

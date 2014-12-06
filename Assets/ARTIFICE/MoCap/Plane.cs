@@ -41,7 +41,7 @@ public class Plane : MonoBehaviour {
 	public bool isFlying = false;
 
 	public float minHeight = 0.0f;
-	public float maxHeight = 2.5f;
+	public float maxHeight = 10.5f;
 	public float maxSpeed = 10.0f;
 	public float minSpeed = 0.0f;
 	public float speed = 0.0f;
@@ -87,7 +87,7 @@ public class Plane : MonoBehaviour {
 		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("spinning_plane(Clone)").transform;
 		speed = 0.0f;
 		minHeight = -1.5f;
-		maxHeight = 2.0f;
+		maxHeight = 10.0f;
 		maxSpeed = 10.0f;
 		minSpeed = 2.0f;
 		speed = 0.0f;

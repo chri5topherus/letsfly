@@ -10,6 +10,8 @@ public class Chicken : MonoBehaviour {
 	public bool goingLeft = false;
 	public bool goingRight = false;
 	public bool isMoving = true;
+	public bool foundTomat = false;
+	public Vector3 tomatDirection;
 
 
 	// Use this for initialization
@@ -24,17 +26,20 @@ public class Chicken : MonoBehaviour {
 		goingLeft = false;
 		goingRight = false;
 		transform.rotation = Quaternion.LookRotation (Quaternion.AngleAxis (90.0f, Vector3.up) * direction);
+		transform.parent = GameObject.Find ("SpawnTest").transform;
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(isMoving) {
+
+		if(isMoving && !foundTomat) {
 			timePassed += Time.deltaTime;
 			Vector3 newPos = new Vector3(transform.position.x+direction.x*speed*Time.deltaTime, transform.position.y+direction.y*speed*Time.deltaTime, transform.position.z + direction.z*speed*Time.deltaTime);
 			transform.position = newPos;
 
 			if (timePassed >= 1) {
+
 				float x = Random.Range (0.0f, 100.0f);
 				if (x < 50.0f) {
 						goingLeft = true;
@@ -62,12 +67,26 @@ public class Chicken : MonoBehaviour {
 				} 
 			}
 		}
+		else if(isMoving && foundTomat) {
+			Vector3 newPos = new Vector3(transform.position.x+tomatDirection.x*speed*Time.deltaTime, transform.position.y+tomatDirection.y*speed*Time.deltaTime, transform.position.z + tomatDirection.z*speed*Time.deltaTime);
+			transform.position = newPos;
+		}
+		foundTomat = false;
 
 	}
 
-	void OnCollisionEnter(Collision theCollision){
-		//Debug.Log ("hallo2");
+	void OnTriggerStay(Collider other){
+		if(other.gameObject.name.Contains("Tomat")) {
+			//Debug.Log ("chicken found tomate");
+			foundTomat = true;
+
+			tomatDirection = other.gameObject.transform.position - transform.position;
+			tomatDirection.y = 0.0f;
+			tomatDirection.Normalize();
+		}
 	}
+
+
 
 
 }
