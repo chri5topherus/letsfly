@@ -113,6 +113,7 @@ public class Plane : MonoBehaviour {
 				speedUp = true;
 			}
 
+
 			if (Input.GetKey (KeyCode.UpArrow)) {
 				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, true, false, speedUp);
 				stepMoved = true;
