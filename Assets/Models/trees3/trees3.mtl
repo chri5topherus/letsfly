@@ -1,0 +1,35 @@
+newmtl Leaf_CoconutGree
+Ka 0 0 0
+Ns 7.69061
+Ks 1 1 1
+Kd 0.184378 0.314827 0.0163448
+map_Kd Leaf_CoconutGre0.jpg
+map_Bump Leaf_CoconutGre1.jpg
+newmtl Leaf_Eucalyptus
+Ka 0 0 0
+Ns 20.0855
+Ks 1 1 1
+Kd 0.0345997 0.0539163 0.0193732
+map_Kd Leaf_Eucalyptus_1.jpg
+map_Bump Leaf_Eucalyptus__1.jpg
+newmtl Leaf_Baobab_
+Ka 0 0 0
+Ns 7.69061
+Ks 0.623529 0.807843 0.568627
+Kd 0.0346168 0.103278 0.0173477
+map_Kd Leaf_Baobab__2.jpg
+map_Bump Leaf_Baobab__b_2.jpg
+newmtl Bottom_Trunk0
+Ka 0 0 0
+Ns 8.16617
+Ks 1 1 1
+Kd 0.440909 0.432285 0.396028
+map_Kd Bottom_Trunk0_3.jpg
+map_Bump Bottom_Trunk_b0_3.jpg
+newmtl Bottom_Trunk1
+Ka 0 0 0
+Ns 1.1275
+Ks 1 1 1
+Kd 0.234258 0.233929 0.195807
+map_Kd Bottom_Trunk1_4.jpg
+map_Bump Bottom_Trunk_b1_4.jpg
