@@ -15,6 +15,9 @@ public class GameLogic : MonoBehaviour {
 	public int caughtChickens = 0;
 	public int planeChickenCount = 0;
 
+	public bool isFinished = false;
+	public bool isCrashed = false;
+
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +25,8 @@ public class GameLogic : MonoBehaviour {
 		plane = GameObject.Find ("spinning_plane(Clone)");
 		remainingTomat = 1;
 		planeChickenCount = 0;
+		isFinished = false;
+		isCrashed = false;
 	}
 	
 	// Update is called once per frame
@@ -92,4 +97,18 @@ public class GameLogic : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnGUI() {
+		GUI.Box(new Rect(Screen.width / 2 - 200, Screen.height - 40, 400, 25), "Time left: " + getTime() + "         Number of chicken caught: " + caughtChickens + "        " + remainingTomat + " Tomato left");
+		
+		if (isFinished && isCrashed) {
+			GUI.Box(new Rect(Screen.width / 2 - 200, Screen.height / 2 - 15, 400, 25), "GAME OVER!!!");
+			
+		} else if(isFinished && !isCrashed) {
+			GUI.Box(new Rect(Screen.width / 2 - 200, Screen.height / 2 - 15, 400, 25), "GAME FINISHED!!!");
+		}
+	}
+
+
+
 }

@@ -48,6 +48,7 @@ public class Plane : MonoBehaviour {
 
 
 
+
 	private bool initialized=false;//True if StartTrackingLimb has been called for all limbs
 
 	/// <summary>
@@ -86,8 +87,8 @@ public class Plane : MonoBehaviour {
 
 		GameObject.Find ("VirtualCamera").transform.parent = GameObject.Find ("spinning_plane(Clone)").transform;
 		speed = 0.0f;
-		minHeight = -1.5f;
-		maxHeight = 10.0f;
+		minHeight = 1.0f;
+		maxHeight = 15.0f;
 		maxSpeed = 10.0f;
 		minSpeed = 2.0f;
 		speed = 0.0f;
@@ -137,6 +138,14 @@ public class Plane : MonoBehaviour {
 			}
 
 		
+
+			if(Input.GetKey (KeyCode.F) && (speed == minSpeed) & (transform.position.y <= 1.5f)) {
+				GameLogic gl = ((GameLogic)GameObject.Find ("GameLogic(Clone)").GetComponent<GameLogic> ());
+				gl.isCrashed = false;
+				gl.isFinished = true;
+				isMoving = false;
+
+			}
 
 			if(!stepMoved) {
 				this.networkView.RPC ("movePlane", RPCMode.AllBuffered, false, false, false, false, speedUp);
@@ -224,7 +233,17 @@ public class Plane : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionEnter(Collision collision) {
+		Debug.Log ("Crash");
+		isMoving = false;
 
+		GameLogic gl = ((GameLogic)GameObject.Find ("GameLogic(Clone)").GetComponent<GameLogic> ());
+		gl.isCrashed = true;
+		gl.isFinished = true;
+		transform.collider.enabled = false;
+		Destroy (transform.rigidbody);
+		//transform.rigidbody = null;
+	}
 
 }
 

@@ -1,0 +1,126 @@
+<sensor>
+	<tracker>Microsoft</tracker>
+	<mirrormode>true</mirrormode>
+	<smoothing>true</smoothing>
+	<smoothingfactor>0.5</smoothingfactor>
+	<correction>0.5</correction>
+	<prediction>0.5</prediction>
+	<jitter>0.05</jitter>
+	<deviation>0.04</deviation>
+</sensor>
+<server>
+	<transformations>Global coordinates</transformations>
+	<automaticassignment>true</automaticassignment>
+</server>
+<gestures>
+	<gesture name="LEFT" timeout="0">
+		<input type="0">
+			<descriptor>lean</descriptor>
+			<descriptor>left</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>degrees</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>left_arrow</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="RIGHT" timeout="0">
+		<input type="0">
+			<descriptor>lean</descriptor>
+			<descriptor>right</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>degrees</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>right_arrow</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="SPEED" timeout="0">
+		<input type="1">
+			<descriptor>left knee</descriptor>
+			<descriptor>apart from</descriptor>
+			<descriptor>right knee</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>30</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>s</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="UP" timeout="0">
+		<input type="1">
+			<descriptor>left hand</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>head</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<input type="1">
+			<descriptor>right hand</descriptor>
+			<descriptor>above</descriptor>
+			<descriptor>head</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>down_arrow</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="DOWN" timeout="0">
+		<input type="1">
+			<descriptor>left hand</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>left hip</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<input type="1">
+			<descriptor>right hand</descriptor>
+			<descriptor>below</descriptor>
+			<descriptor>right hip</descriptor>
+			<descriptor>at least</descriptor>
+			<descriptor>0</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>up_arrow</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+	<gesture name="LAND" timeout="0">
+		<input type="0">
+			<descriptor>jump</descriptor>
+			<descriptor/>
+			<descriptor>at least</descriptor>
+			<descriptor>10</descriptor>
+			<descriptor>centimeters</descriptor>
+		</input>
+		<output type="0">
+			<descriptor>hold</descriptor>
+			<descriptor>f</descriptor>
+			<descriptor>until complete</descriptor>
+			<descriptor>0</descriptor>
+		</output>
+	</gesture>
+</gestures>
+
